@@ -77,6 +77,14 @@
     onInit=(action 'setFieldElementId')
     class='travis-form__field-component'
   )
+  switchPlan=(component 'forms/form-switch-plan'
+    form=form
+    checked=value
+    disabled=disabled
+    onChange=(action 'handleChange')
+    onInit=(action 'setFieldElementId')
+    class='travis-form__field-component'
+  )
 )}}
 
 {{#if requiresValidation }}
