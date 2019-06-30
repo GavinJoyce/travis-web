@@ -94,6 +94,13 @@ a {
   &--v-center {
     align-items: center;
   }
+  &--wrap {
+    flex-wrap: wrap;
+  }
+  
+  &--col {
+    flex-direction: column;
+  }
 }
 
 .pointer {
@@ -167,18 +174,6 @@ span.emoji.emoji-sizer {
   position: relative;
 }
 
-.d-flex {
-  display: flex;
-}
-
-.flex-wrap {
-  flex-wrap: wrap;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
 .full-width {
   width: 100%;
 }
@@ -198,4 +193,19 @@ span.emoji.emoji-sizer {
   &--underline:not(&--teal) {
     border-bottom-color: $asphalt-grey;
   }
+}
+
+.font{
+  &--italic {
+    font-style: italic;
+  }
+  &--bold {
+    font-weight: 500;
+  }
+  &--bolder {
+    font-weight: 700;
+  }
+}
+.color-asphalt-grey {
+  color: $asphalt-grey;
 }

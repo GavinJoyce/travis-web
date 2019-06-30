@@ -6,6 +6,10 @@
         *
         {{ember-tooltip text='This field is required' delay=300 }}
       </span>
+    {{else if showOptionalMark}}
+      <span class='travis-form__optional-mark'>
+        (Optional)
+      </span>
     {{/if}}
   </label>
 {{/if}}
@@ -70,14 +74,6 @@
     class='travis-form__field-component'
   )
   switch=(component 'forms/form-switch'
-    form=form
-    checked=value
-    disabled=disabled
-    onChange=(action 'handleChange')
-    onInit=(action 'setFieldElementId')
-    class='travis-form__field-component'
-  )
-  switchPlan=(component 'forms/form-switch-plan'
     form=form
     checked=value
     disabled=disabled
