@@ -22,7 +22,12 @@ body {
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: $font-weight-normal;
 }
 
@@ -87,6 +92,7 @@ a {
   &--center {
     justify-content: center;
   }
+
   &--space-between {
     justify-content: space-between;
   }
@@ -94,14 +100,22 @@ a {
   &--v-center {
     align-items: center;
   }
+
   &--wrap {
     flex-wrap: wrap;
   }
-  
+
   &--col {
     flex-direction: column;
   }
 }
+
+@media #{$large-up} {
+  .flex-md-row {
+    flex-direction: row;
+  }
+}
+
 
 .pointer {
   cursor: pointer;
@@ -177,6 +191,7 @@ span.emoji.emoji-sizer {
 .full-width {
   width: 100%;
 }
+
 .link {
   cursor: pointer;
   display: inline-block;
@@ -195,17 +210,28 @@ span.emoji.emoji-sizer {
   }
 }
 
-.font{
+.font {
   &--italic {
     font-style: italic;
   }
+
+  &--light {
+    font-weight: 100;
+  }
+
   &--bold {
     font-weight: 500;
   }
+
   &--bolder {
     font-weight: 700;
   }
 }
+
 .color-asphalt-grey {
   color: $asphalt-grey;
+}
+
+.color-asphalt-blue {
+  color: $oxide-blue;
 }
