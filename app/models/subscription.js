@@ -21,6 +21,7 @@ export default Model.extend({
   source: attr(),
   status: attr(),
   validTo: attr(),
+  organizationId: attr(),
 
   isSubscribed: equal('status', 'subscribed'),
   isCanceled: equal('status', 'canceled'),

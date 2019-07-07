@@ -4,6 +4,6 @@ import { belongsTo } from 'ember-data/relationships';
 
 export default Model.extend({
   lastDigits: attr(),
-
+  token: attr(),
   subscription: belongsTo(),
 });
