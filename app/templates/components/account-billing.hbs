@@ -4,7 +4,7 @@
   {{/if}}
 
   {{#if isTrial}}
-    {{billing-trial account=account plans=plans}}
+    {{billing-trial account=account plans=plans newSubscription=newSubscription}}
   {{/if}}
 
   {{#if isManual}}
@@ -12,7 +12,7 @@
   {{/if}}
 
   {{#if isManaged}}
-    {{billing-subscription account=account}}
+  {{billing-subscription account=account}}
   {{/if}}
 </section>
 
