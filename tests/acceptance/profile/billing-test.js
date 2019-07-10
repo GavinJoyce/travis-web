@@ -275,7 +275,7 @@ test('view billing information with invoices', async function (assert) {
     assert.ok(profilePage.billing.manageButton.isDisabled, 'expected disabled subscription management button when lacking permissions');
   });
 
-  test('view billing tab when there is no subscription', async function (assert) {
+  test('view billing tab when there is no subscription and no write permissions', async function (assert) {
     server.db.subscriptions.remove();
     this.user.permissions.createSubscription = false;
 
@@ -283,12 +283,12 @@ test('view billing information with invoices', async function (assert) {
     await profilePage.billing.visit();
 
     percySnapshot(assert);
-    assert.ok(profilePage.billing.expiryMessage.isHidden);
 
+    assert.ok(profilePage.billing.expiryMessage.isHidden);
     assert.equal(profilePage.billing.noPermissionMessage.text, 'You do not have permission to create a subscription');
   });
 
-  test('switching to another account’s billing tab loads the subscription properly', async function (assert) {
+  test('switching to another account’s billing tab loads the subscription form properly', async function (assert) {
     this.organization.permissions = {
       createSubscription: true
     };
