@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupApplicationTest } from 'travis/tests/helpers/setup-application-test';
 import profilePage from 'travis/tests/pages/profile';
 import signInUser from 'travis/tests/helpers/sign-in-user';
-// import { selectChoose } from 'ember-power-select/test-support';
+import { selectChoose } from 'ember-power-select/test-support';
 import Service from '@ember/service';
 import { percySnapshot } from 'ember-percy';
 import { stubService } from 'travis/tests/helpers/stub-service';
@@ -82,14 +82,6 @@ module('Acceptance | profile/billing', function (hooks) {
       }
     });
     this.organization = organization;
-  }
-});
-
-test('view billing information with invoices', async function (assert) {
-  this.subscription.createInvoice({
-    id: '1919',
-    created_at: new Date(1919, 4, 15),
-    url: 'https://example.com/1919.pdf'
   });
 
   test('view billing information with invoices', async function (assert) {
@@ -105,37 +97,37 @@ test('view billing information with invoices', async function (assert) {
       url: 'https://example.com/2010.pdf'
     });
 
-  await profilePage.visit();
-  await profilePage.billing.visit();
+    await profilePage.visit();
+    await profilePage.billing.visit();
 
-  percySnapshot(assert);
+    percySnapshot(assert);
 
-  assert.equal(profilePage.billing.manageButton.href, 'https://billing.travis-ci.com/subscriptions/user');
-  assert.notOk(profilePage.billing.manageButton.isDisabled);
-  assert.notOk(profilePage.billing.manageButton.isNew);
-  assert.equal(profilePage.billing.manageButton.text, 'Edit subscription');
-  assert.ok(profilePage.billing.expiryMessage.isHidden);
-  assert.ok(profilePage.billing.marketplaceButton.isHidden);
+    assert.equal(profilePage.billing.manageButton.href, 'https://billing.travis-ci.com/subscriptions/user');
+    assert.notOk(profilePage.billing.manageButton.isDisabled);
+    assert.notOk(profilePage.billing.manageButton.isNew);
+    assert.equal(profilePage.billing.manageButton.text, 'Edit subscription');
+    assert.ok(profilePage.billing.expiryMessage.isHidden);
+    assert.ok(profilePage.billing.marketplaceButton.isHidden);
 
-  assert.equal(profilePage.billing.plan.name, 'Small Business Plan');
-  assert.equal(profilePage.billing.plan.concurrency, '5 concurrent jobs');
+    assert.equal(profilePage.billing.plan.name, 'Small Business Plan');
+    assert.equal(profilePage.billing.plan.concurrency, '5 concurrent jobs');
 
-  assert.equal(profilePage.billing.address.text, 'User Name Travis CI GmbH Rigaerstraße 8 Address 2 Berlin, Berlin 10987 Germany VAT: 12345');
-  assert.equal(profilePage.billing.source, 'This plan is paid through Stripe.');
-  assert.equal(profilePage.billing.creditCardNumber.text, '•••• •••• •••• 1919');
-  assert.equal(profilePage.billing.price.text, '$69 per month');
+    assert.equal(profilePage.billing.address.text, 'User Name Travis CI GmbH Rigaerstraße 8 Address 2 Berlin, Berlin 10987 Germany VAT: 12345');
+    assert.equal(profilePage.billing.source, 'This plan is paid through Stripe.');
+    assert.equal(profilePage.billing.creditCardNumber.text, '•••• •••• •••• 1919');
+    assert.equal(profilePage.billing.price.text, '$69 per month');
 
-  assert.ok(profilePage.billing.annualInvitation.isVisible, 'expected the invitation to switch to annual billing to be visible');
+    assert.ok(profilePage.billing.annualInvitation.isVisible, 'expected the invitation to switch to annual billing to be visible');
 
-  assert.equal(profilePage.billing.invoices.items.length, 2);
+    assert.equal(profilePage.billing.invoices.items.length, 2);
 
-  profilePage.billing.invoices.items[1].as(i1919 => {
-    assert.equal(i1919.text, '1919 May 1919');
-    assert.equal(i1919.href, 'https://example.com/1919.pdf');
+    profilePage.billing.invoices.items[1].as(i1919 => {
+      assert.equal(i1919.text, '1919 May 1919');
+      assert.equal(i1919.href, 'https://example.com/1919.pdf');
+    });
+
+    assert.equal(profilePage.billing.invoices.items[0].text, '2010 February 2010');
   });
-
-  assert.equal(profilePage.billing.invoices.items[0].text, '2010 February 2010');
-});
 
   test('view billing on an expired stripe plan', async function (assert) {
     this.subscription.status = 'expired';
@@ -289,11 +281,11 @@ test('view billing information with invoices', async function (assert) {
 
   test('view billing tab when not subscribed select different plan changes correctly', async function (assert) {
     this.subscription.destroy();
-  
+
     await profilePage.visit();
     await profilePage.billing.visit();
     await profilePage.billing.billingPlanChoices.lastBox.visit();
-  
+
     assert.dom(profilePage.billing.selectedBillingPlan.name.scope).hasTextContaining(`${this.lastPlan.name} plan`);
     assert.dom(profilePage.billing.selectedBillingPlan.jobs.scope).hasTextContaining(`${this.lastPlan.builds} concurrent jobs`);
     assert.dom(profilePage.billing.selectedBillingPlan.freeJobs.scope).hasTextContaining('3 free concurrent jobs');
@@ -312,7 +304,7 @@ test('view billing information with invoices', async function (assert) {
   });
 
   test('view billing tab when there is no subscription and no write permissions', async function (assert) {
-    server.db.subscriptions.remove();
+    this.subscription.destroy();
     this.user.permissions.createSubscription = false;
 
     await profilePage.visit();
@@ -334,6 +326,8 @@ test('view billing information with invoices', async function (assert) {
     await profilePage.billing.visit();
     await profilePage.accounts[1].visit();
     await profilePage.billing.visit();
+
+    percySnapshot(assert);
 
     assert.ok(profilePage.billing.billingForm.isPresent);
     assert.ok(profilePage.billing.billingPlanChoices.isPresent);
@@ -552,34 +546,33 @@ test('view billing information with invoices', async function (assert) {
     assert.ok(profilePage.billing.price.isHidden);
     assert.ok(profilePage.billing.annualInvitation.isHidden);
   });
-});
 
-test('view billing tab when no subscription should fill form at transition to payment', function (assert) {
-  this.subscription.destroy();
+  test('view billing tab when no subscription should fill form at transition to payment', async function (assert) {
+    this.subscription.destroy();
 
-  profilePage.visit();
-  profilePage.billing.visit();
+    await profilePage.visit();
+    await profilePage.billing.visit();
 
-  const { billingForm, subscribeButton, billingPaymentForm } = profilePage.billing;
+    const { billingForm, subscribeButton, billingPaymentForm } = profilePage.billing;
 
-  // selectChoose('.billing-country', 'Germany');
+    await selectChoose('.billing-country', 'Germany');
 
-  billingForm
-    .fillIn('firstname', 'John')
-    .fillIn('lastname', 'Doe')
-    .fillIn('companyName', 'Travis')
-    .fillIn('email', 'john@doe.com')
-    .fillIn('address', '15 Olalubi street')
-    .fillIn('suite', '23 Grace')
-    .fillIn('city', 'Berlin')
-    .fillIn('zip', '353564')
-    .fillIn('vat', '356463');
+    await billingForm
+      .fillIn('firstname', 'John')
+      .fillIn('lastname', 'Doe')
+      .fillIn('companyName', 'Travis')
+      .fillIn('email', 'john@doe.com')
+      .fillIn('address', '15 Olalubi street')
+      .fillIn('suite', '23 Grace')
+      .fillIn('city', 'Berlin')
+      .fillIn('zip', '353564')
+      .fillIn('vat', '356463');
 
-  subscribeButton.click();
+    subscribeButton.click();
 
-  andThen(() => {
     percySnapshot(assert);
 
     assert.ok(billingPaymentForm.isPresent);
   });
 });
+
