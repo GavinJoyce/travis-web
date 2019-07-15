@@ -1,7 +1,7 @@
 import { helper } from '@ember/component/helper';
 
 export function formatCurrency([value, ...rest]) {
-  let dollars = Math.floor(value / 100);
+  const dollars = Math.floor(value / 100);
   return `$${dollars}`;
 }
 
