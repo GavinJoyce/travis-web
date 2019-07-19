@@ -13,13 +13,10 @@
           data-test-invoice-select-year
           value=year
           class='margin-top-0'
-          showRequiredMark=true
           onChange=(action (mut year))
           showValidationStatusIcons=false as |field|
         }}
-          {{#field.select
-            options=invoiceYears as |year|
-          }}
+          {{#field.select options=invoiceYears as |year|}}
             {{year}}
           {{/field.select}}
         {{/form.field}}
