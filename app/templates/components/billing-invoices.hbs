@@ -1,15 +1,16 @@
-<section class='invoices'>
+<section class='invoices' data-test-invoices>
   <h2>Invoice History</h2>
   <div class='flex flex--wrap flex--space-between'>
-    <p class='margin-top-0'>
+    <p class='margin-top-0' data-test-help-text>
       {{svg-jar 'icon-help' class='icon-help' alt=''}} Having trouble with your invoices?
       {{#link-to 'help' (query-params anchor='form')}}
-      We’re happy to help
+        We’re happy to help
       {{/link-to}}
     </p>
     {{#travis-form as |form|}}      
       <div class='form-elem select invoice-select-year'>
         {{#form.field
+          data-test-invoice-select-year
           value=year
           class='margin-top-0'
           showRequiredMark=true
@@ -28,35 +29,21 @@
   <div class='invoice-table'>
     <table>
       <thead>
-        <tr>
-          <th>
-            invoice date
-          </th>
-          <th>
-            payment card
-          </th>
-          <th>
-            total
-          </th>
-          <th>
-            download
-          </th>
+        <tr data-test-table-header-row>
+          <th> invoice date </th>
+          <th> payment card </th>
+          <th> total </th>
+          <th> download </th>
         </tr>
       </thead>
       <tbody>
         {{#each (sort-by 'createdAt:desc' selectedInvoices) as |invoice|}}
-          <tr>
+          <tr data-test-invoice>
+            <td> {{moment-format invoice.createdAt 'MMMM DD, YYYY'}} </td>
+            <td> •••• •••• •••• {{subscription.creditCardInfo.lastDigits}} </td>
+            <td> {{format-currency subscription.plan.price }} </td>
             <td>
-              {{svg-jar 'icon-invoice' class='icon'}}{{moment-format invoice.createdAt 'MMMM DD, YYYY'}}
-            </td>
-            <td>
-              •••• •••• •••• {{subscription.creditCardInfo.lastDigits}}
-            </td>
-            <td>
-              {{format-currency subscription.plan.price }}
-            </td>
-            <td>
-              <a data-test-invoice href={{invoice.url}}>
+              <a data-test-invoice-url href={{invoice.url}}>
                 {{svg-jar 'icon-invoice' class='icon'}}
               </a>
             </td>
