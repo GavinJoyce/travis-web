@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import { A } from '@ember/array';
 import { computed } from '@ember/object';
 
 export default Component.extend({
@@ -8,7 +7,7 @@ export default Component.extend({
     const invoiceYears = this.invoices.map(invoice => invoice.createdAt.getFullYear());
     const distinctInvoiceYears = new Set(invoiceYears);
     const sortedDistinctInvoiceYears = [...distinctInvoiceYears].sort((a, b) => b - a);
-    return A(sortedDistinctInvoiceYears);
+    return sortedDistinctInvoiceYears;
   }),
 
   year: computed('invoiceYears.[]', {
